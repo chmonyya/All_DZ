@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@drawable/fon">
+
+    <Button
+        android:id="@+id/dz2_2"
+        android:layout_width="118dp"
+        android:layout_height="84dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="32dp"
+        android:onClick="onClickDZ2_2"
+        android:text="ДЗ 2_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/dz2_3"
+        android:layout_width="116dp"
+        android:layout_height="87dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="72dp"
+        android:onClick="onClickDZ2_3"
+        android:text="ДЗ 2_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

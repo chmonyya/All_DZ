@@ -8,6 +8,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,58 +83,61 @@ public class MainActivity extends AppCompatActivity {
         pb.setMax(100);
         TextView itogo = findViewById(R.id.itogo);
 
+        ArrayList<Ticket> tickets = new ArrayList<>();
 
+        /*
+        заказ
+         */
         int adult = 9;
         int old = 5;
         int kids = 11;
 
 
+        for (int i = 0; i < adult; i++) {
+            Ticket tik = new Ticket(TicketType.ADULT);
+            tickets.add(tik);
+        }
+        for (int i = 0; i < old; i++) {
+            Ticket tik = new Ticket(TicketType.OLD);
+            tickets.add(tik);
+        }
 
+        for (int i = 0; i < kids; i++) {
+            Ticket tik = new Ticket(TicketType.KIDS);
+            tickets.add(tik);
+        }
 
-        Thread t = new Thread(new Runnable(){
-            //int bca = 70;
-            //double bco = bca - ((bca / 100) * 50);
-            //double bck = bca - ((bca / 100) * 30);
-            int cash = 1;
-            ArrayList<Ticket> tickets = new ArrayList<>();
+        Timer timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int tick = 1;
 
             @Override
-            public void run(){
+            public void run() {
 
-                for (int i = 0; i < adult; i++) {
-                    Ticket tik = new Ticket(TicketType.ADULT);
-                    tickets.add(tik);
-                }
-                for (int i = 0; i < old; i++) {
-                    Ticket tik = new Ticket(TicketType.OLD);
-                    tickets.add(tik);
+                pb.setProgress(tick, true);
+                tick++;
+                if (tick==100) {
+                    this.cancel();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            double itog = 0;
+                            for (Ticket t : tickets) {
+                                itog = itog + t.cost;
+                            }
+                            itogo.setText("Билетов:"+tickets.size()+", сумма: "+itog+ "монеток");
+                        }
+                    });
+                    //itogo.setText("Билетов:"+", сумма: "+itog+ "монеток");
                 }
 
-                for (int i = 0; i < kids; i++) {
-                    Ticket tik = new Ticket(TicketType.KIDS);
-                    tickets.add(tik);
-                }
 
-                //double itog = (bca * adult) + (bco * old) + (bck * kids);
-                try {
-                    while (cash != 100){
-                        cash++;
-                        pb.setProgress(cash, true);
-                        Thread.sleep(15);
-                    }
-
-                } catch (InterruptedException ex) {
-                }
-                double itog = 0;
-                for (Ticket t : tickets) {
-                    itog = itog + t.cost;
-                }
-                //.itogo.setText("Билетов:"+tickets.size()+", сумма: "+itog+ "монеток");
-                itogo.setText("Билетов:"+", сумма: "+itog+ "монеток");
             }
-        });
+        }, 0, 25);
 
-        t.start();
+
+
     }
 
 

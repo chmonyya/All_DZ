@@ -19,6 +19,28 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/dz2_4"
+        android:layout_width="118dp"
+        android:layout_height="84dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="192dp"
+        android:onClick="onClickDZ2_4"
+        android:text="ДЗ 2_4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/dz2_5"
+        android:layout_width="118dp"
+        android:layout_height="84dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="192dp"
+        android:onClick="onClickDZ2_5"
+        android:text="ДЗ 2_5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/dz2_3"
         android:layout_width="116dp"
         android:layout_height="87dp"
@@ -28,4 +50,5 @@
         android:text="ДЗ 2_3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

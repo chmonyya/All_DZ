@@ -3,7 +3,10 @@ package ru.sinergy.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -85,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Ticket> tickets = new ArrayList<>();
 
-        /*
-        заказ
-         */
+
+        //заказ
+
         int adult = 9;
         int old = 5;
         int kids = 11;
@@ -135,10 +138,90 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }, 0, 25);
+    }
 
+
+    public void onNumInp(View view){
 
 
     }
+
+
+    public void onClickDZ2_4(View view) {
+        setContentView(R.layout.dz2_4);
+
+        EditText ed = findViewById(R.id.biletNum);
+        ed.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                TextView itog = findViewById(R.id.itog);
+
+                if (s.length() < 6){
+                    itog.setText("!!! Номер должен быть шестизначным !!!");
+                    return;
+                }
+                String str = s.toString();
+                int orig = Integer.valueOf(str);
+
+                if (isHappy(orig)){
+                    itog.setText("Ваш билет счастливый");
+                }
+                else{
+                    while (!isHappy(orig)){
+                        orig++;
+                    }
+                    itog.setText("Ваш билет несчастливый:(  \nБлижайший счастливый билет: " + orig);
+
+
+                }
+
+
+            }
+
+            public boolean isHappy (int num) {
+                int chet = 0;
+                int nechet = 0;
+                String s = String.valueOf(num);
+
+
+                for (int i = 0; i < s.length(); i++) {
+                    char c = s.charAt(i);
+                    int n = Character.getNumericValue(c);
+
+                    if (n % 2 == 0){
+                        chet += n;
+                    }
+                    else {
+                        nechet += n;
+                    }
+
+                }
+                return  chet==nechet;
+            }
+
+
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

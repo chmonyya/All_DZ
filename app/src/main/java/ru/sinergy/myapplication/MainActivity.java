@@ -212,6 +212,55 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    int weight;
+    public void onClickDZ2_5(View view){
+        setContentView(R.layout.dz2_5);
+        EditText ed = findViewById(R.id.gruz);
+
+
+        ed.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    weight = Integer.valueOf(editable.toString());
+
+
+                }
+                catch (NumberFormatException e){
+                    weight = 0;
+                }
+            }
+        });
+    }
+
+    public void chet(View view){
+        TextView count = findViewById(R.id.count);
+        double delit = 9.80665 / 3.721;
+        count.setText("Понадобится \n" + ((int)((weight*100) / delit)) + "\n кг топлива");
+    }
+
+    public void exit(View view){
+        finish();
+    }
+
+
+
+
+
+
+
+
+
 
 
 

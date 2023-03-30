@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickBack(View view) {
         setContentView(R.layout.activity_main);
+        mode = Mode.CANCEL;
     }
 
 
@@ -254,7 +255,72 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    Mode mode = Mode.CANCEL;
 
+    public void onClickDZ2_6(View view){
+        setContentView(R.layout.dz2_6);
+        TextView tim = findViewById(R.id.tim);
+        mode = Mode.RESET;
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int tick = 0;
+
+            @Override
+            public void run() {
+                switch (mode){
+                    case FORWARD:
+                        tick++;
+                        break;
+
+                    case BACK:
+                        tick--;
+                        break;
+
+                    case PAUSE:
+                        return;
+
+                    case RESET:
+                        tick = 0;
+                        break;
+
+                    case CANCEL:
+                        this.cancel();
+                        break;
+                }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tim.setText("" + tick);
+                        }
+                    });
+
+            }
+
+
+
+        }, 0, 1000);
+    }
+
+    enum Mode{
+        BACK, FORWARD, PAUSE, RESET, CANCEL
+    }
+
+    public void back(View view){
+        mode = Mode.BACK;
+    }
+
+    public void forward(View view){
+        mode = Mode.FORWARD;
+    }
+
+    public void pause(View view){
+        mode = Mode.PAUSE;
+    }
+
+    public void reset(View view){
+        mode = Mode.RESET;
+    }
 
 
 

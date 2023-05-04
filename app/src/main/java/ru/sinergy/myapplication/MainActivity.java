@@ -17,18 +17,129 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     // private Button dz2_2;
-    //  private Button dz2_3;
-
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle b) {
+        super.onCreate(b);
         setContentView(R.layout.activity_main);
-
         // dz2_2 = findViewById(R.id.dz2_2);
-        //  dz2_3 = findViewById(R.id.dz2_3);
-
     }
+
+    /*
+    при повороте
+    onSaveInstanceState
+    onPause
+    onStop
+    onDestroy
+    onCreate
+    onStart
+    onRestoreInstanceState
+    onResume
+     */
+
+    protected void onSaveInstanceState(Bundle b) {
+        super.onSaveInstanceState(b);
+        if (mode!=Mode.CANCEL) {
+            b.putInt("timer_tick", tick);
+            b.putString("timer_mode", mode.name());
+        }
+    }
+
+    protected void onRestoreInstanceState(Bundle b) {
+        super.onRestoreInstanceState(b);
+        mode = Mode.valueOf(b.getString("timer_mode"));
+        if (mode!=Mode.CANCEL) {
+            tick = b.getInt("timer_tick");
+        }
+    }
+
+    //protected void onResume() {
+    //    super.onResume();
+    //    Log.d(LOG_TAG, "onResume ");
+   // }
+
+
+    Mode mode = Mode.CANCEL;
+    int tick = 0;
+
+    public void onClickDZ2_6(View view){
+        setContentView(R.layout.dz2_6);
+        TextView tim = findViewById(R.id.tim);
+        mode = Mode.RESET;
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+
+            @Override
+            public void run() {
+                switch (mode){
+                    case FORWARD:
+                        tick++;
+                        break;
+
+                    case BACK:
+                        tick--;
+                        break;
+
+                    case PAUSE:
+                        return;
+
+                    case RESET:
+                        tick = 0;
+                        break;
+
+                    case CANCEL:
+                        this.cancel();
+                        break;
+                }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tim.setText("" + tick);
+                        }
+                    });
+
+            }
+
+
+
+        }, 0, 1000);
+    }
+
+    enum Mode{
+        BACK, FORWARD, PAUSE, RESET, CANCEL
+    }
+
+    public void back(View view){
+        mode = Mode.BACK;
+    }
+
+    public void forward(View view){
+        mode = Mode.FORWARD;
+    }
+
+    public void pause(View view){
+        mode = Mode.PAUSE;
+    }
+
+    public void reset(View view){
+        mode = Mode.RESET;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void onClickDZ2_2(View view) {
         //Toast.makeText(this, "onClickDZ2_2", Toast.LENGTH_SHORT).show();
@@ -253,85 +364,6 @@ public class MainActivity extends AppCompatActivity {
     public void exit(View view){
         finish();
     }
-
-
-    Mode mode = Mode.CANCEL;
-
-    public void onClickDZ2_6(View view){
-        setContentView(R.layout.dz2_6);
-        TextView tim = findViewById(R.id.tim);
-        mode = Mode.RESET;
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            int tick = 0;
-
-            @Override
-            public void run() {
-                switch (mode){
-                    case FORWARD:
-                        tick++;
-                        break;
-
-                    case BACK:
-                        tick--;
-                        break;
-
-                    case PAUSE:
-                        return;
-
-                    case RESET:
-                        tick = 0;
-                        break;
-
-                    case CANCEL:
-                        this.cancel();
-                        break;
-                }
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            tim.setText("" + tick);
-                        }
-                    });
-
-            }
-
-
-
-        }, 0, 1000);
-    }
-
-    enum Mode{
-        BACK, FORWARD, PAUSE, RESET, CANCEL
-    }
-
-    public void back(View view){
-        mode = Mode.BACK;
-    }
-
-    public void forward(View view){
-        mode = Mode.FORWARD;
-    }
-
-    public void pause(View view){
-        mode = Mode.PAUSE;
-    }
-
-    public void reset(View view){
-        mode = Mode.RESET;
-    }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1,22 +1,27 @@
 package ru.sinergy.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    // private Button dz2_2;
+    private Random rnd = new Random();
 
     @Override
     protected void onCreate(Bundle b) {
@@ -57,6 +62,95 @@ public class MainActivity extends AppCompatActivity {
     //    super.onResume();
     //    Log.d(LOG_TAG, "onResume ");
    // }
+
+
+
+
+
+
+
+
+
+
+
+
+    // создание полей для вывода на экран нужных значений
+    private TextView coordinatesOut; // окно вывода значений координат
+    private int x; // задание поля для координаты X
+    private int y; // задание поля для координаты Y
+    private String sDown; // строка для записи координат нажатия
+    private String sMove; // строка для записи координат движения
+    private String sUp; // строка для записи координат отпускания
+
+    // задание дополнительных полей координат кота Шрёдингера
+    private int xCat = 50 + rnd.nextInt(800); // задание поля для координаты X
+    private int yCat = 50 + rnd.nextInt(1300); // задание поля для координаты Y
+    private final int deltaCat = 50; // допустимая погрешность в нахождении кота
+    private long stamp = 0;
+
+    public void onClickDZ3_2(View view) {
+        //Toast.makeText(this, "onClickDZ2_2", Toast.LENGTH_SHORT).show();
+        setContentView(R.layout.dz3_2);
+        // присваивание переменной активити элемента представления activity_main
+        coordinatesOut = findViewById(R.id.coordinatesOut);
+
+        // выполнение действий при касании экрана
+        coordinatesOut.setOnTouchListener(listener);
+    }
+
+    // объект обработки касания экрана (слушатель)
+    private View.OnTouchListener listener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) { // в motionEvent пишутся координаты
+            if (System.currentTimeMillis() - stamp < 4000) return true; //защита от мультиклика
+            x = (int) motionEvent.getX(); // инициализация координат X
+            y = (int) motionEvent.getY(); // инициализация координат Y
+
+            switch (motionEvent.getAction()) { // метод getAction() считывает состояние касания (нажатие/движение/отпускание)
+
+                case MotionEvent.ACTION_DOWN: // нажатие
+                    sDown = "Касание: x=" + x + ", y=" + y;
+                    sMove = "";
+                    sUp = "";
+                    break;
+
+                    case MotionEvent.ACTION_MOVE: // движение
+                    //sMove = "Движение: x=" + x + ", y=" + y;
+                    // задание условия нахождения кота Шрёдингера
+                    if ( Math.abs(x - xCat) < deltaCat && Math.abs(y - yCat) < deltaCat) { // если пользователь коснулся места нахождения кота
+                        stamp = System.currentTimeMillis();
+                        // размещаем тост (контекст, сообщение, длительность сообщения)
+                        Toast toast = Toast.makeText(getApplicationContext(), R.string.successful_search, Toast.LENGTH_SHORT); // инициализация
+                        //LinearLayout toastContainer = (LinearLayout) toast.getView(); !!! return null sience android api 11, use toast.setView(ImageView)
+                        // добавление в тост картинки
+                        ImageView cat = new ImageView(getApplicationContext()); // создание объекта картинки (контекст)
+                        cat.setImageResource(R.drawable.found_cat); // добавление картинки из ресурсов
+                        toast.setView(cat);
+                        toast.setGravity(Gravity.LEFT | Gravity.TOP,  55, y - 100); // задание позиции на экране (положение, смещение по оси Х, смещение по оси Y)
+                        toast.show(); // демонстрация тоста на экране
+                        coordinatesOut.setText("Мяу");
+                        xCat = 50 + rnd.nextInt(800);
+                        yCat = 50 + rnd.nextInt(1300);
+                        return true;
+                    } else {
+                        sMove = "Движение: x=" + x + ", y=" + y;
+                    }
+                    break;
+
+                    case MotionEvent.ACTION_UP: // отпускание
+                case MotionEvent.ACTION_CANCEL: // внутрений сбой (аналогичен ACTION_UP)
+                    sMove = "";
+                    sUp = "Отпускание: x="+x+", y="+y;
+                    break;
+            }
+
+            // вывод на экран в три строки считанных значений координат
+            coordinatesOut.setText(sDown + "\n" + sMove + "\n" + sUp);
+
+            return true; // подтверждение нашей обработки событий
+        }
+    };
+
 
 
     Mode mode = Mode.CANCEL;

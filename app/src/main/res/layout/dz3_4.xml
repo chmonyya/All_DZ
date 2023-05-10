@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginTop="268dp"
-        android:onClick="back"
-        android:text="назад"
+        android:onClick="dz34_back"
+        android:text="@string/back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,8 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
         android:layout_marginTop="268dp"
-        android:onClick="pause"
-        android:text="пауза"
+        android:onClick="dz34_pause"
+        android:text="II"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,20 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="268dp"
         android:layout_marginEnd="36dp"
-        android:onClick="forward"
-        android:text="вперед"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/dz26_info"
-        android:layout_width="154dp"
-        android:layout_height="37dp"
-        android:layout_marginTop="196dp"
-        android:layout_marginEnd="128dp"
-        android:gravity="center"
-        android:text="0"
-        android:textSize="20sp"
+        android:onClick="dz34_forward"
+        android:text="@string/forward"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -67,8 +55,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="372dp"
         android:layout_marginEnd="148dp"
-        android:onClick="reset"
-        android:text="обнулить"
+        android:onClick="dz34_play"
+        android:text="PLAY"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dz34_info"
+        android:layout_width="275dp"
+        android:layout_height="136dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="96dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

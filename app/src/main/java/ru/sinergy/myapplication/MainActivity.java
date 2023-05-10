@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,10 +63,31 @@ public class MainActivity extends AppCompatActivity {
    // }
 
 
+    TextView dz34_info;
+
+    public void onClickDZ3_4(View view) {
+        setContentView(R.layout.dz3_4);
+        dz34_info = findViewById(R.id.dz34_info);
 
 
 
+    }
 
+    public void dz34_back(View view){
+        dz34_info.setText("<<");
+    }
+
+    public void dz34_forward(View view){
+        dz34_info.setText(">>");
+    }
+
+    public void dz34_pause(View view){
+        dz34_info.setText("||");
+    }
+
+    public void dz34_play(View view){
+        dz34_info.setText("|>");
+    }
 
 
 
@@ -81,13 +101,11 @@ public class MainActivity extends AppCompatActivity {
     private String sDown; // строка для записи координат нажатия
     private String sMove; // строка для записи координат движения
     private String sUp; // строка для записи координат отпускания
-
     // задание дополнительных полей координат кота Шрёдингера
     private int xCat = 50 + rnd.nextInt(800); // задание поля для координаты X
     private int yCat = 50 + rnd.nextInt(1300); // задание поля для координаты Y
     private final int deltaCat = 50; // допустимая погрешность в нахождении кота
     private long stamp = 0;
-
     public void onClickDZ3_2(View view) {
         //Toast.makeText(this, "onClickDZ2_2", Toast.LENGTH_SHORT).show();
         setContentView(R.layout.dz3_2);
@@ -158,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickDZ2_6(View view){
         setContentView(R.layout.dz2_6);
-        TextView tim = findViewById(R.id.tim);
+        TextView tim = findViewById(R.id.dz26_info);
         mode = Mode.RESET;
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {

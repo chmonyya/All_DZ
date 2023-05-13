@@ -21,20 +21,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="268dp"
+        android:layout_marginTop="316dp"
         android:onClick="dz34_back"
         android:text="@string/back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/pause"
+        android:id="@+id/play_pause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
-        android:layout_marginTop="268dp"
-        android:onClick="dz34_pause"
-        android:text="II"
+        android:layout_marginTop="316dp"
+        android:onClick="dz34_play_pause"
+        android:text="PLAY"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,21 +42,10 @@
         android:id="@+id/forward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="268dp"
+        android:layout_marginTop="316dp"
         android:layout_marginEnd="36dp"
         android:onClick="dz34_forward"
         android:text="@string/forward"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="372dp"
-        android:layout_marginEnd="148dp"
-        android:onClick="dz34_play"
-        android:text="PLAY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,8 +54,29 @@
         android:layout_width="275dp"
         android:layout_height="136dp"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="60dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="337dp"
+        android:layout_height="34dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dz34_info" />
+
+    <TextView
+        android:id="@+id/seekBarHint"
+        android:layout_width="344dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

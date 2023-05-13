@@ -1,17 +1,25 @@
 package ru.sinergy.myapplication;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
-import java.util.TimerTask;import android.os.Bundle;
+import java.util.TimerTask;
+
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,51 +51,125 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onSaveInstanceState(Bundle b) {
         super.onSaveInstanceState(b);
-        if (mode!=Mode.CANCEL) {
+        if (timerMode!=TimerMode.CANCEL) {
             b.putInt("timer_tick", tick);
-            b.putString("timer_mode", mode.name());
+            b.putString("timer_mode", timerMode.name());
         }
     }
 
     protected void onRestoreInstanceState(Bundle b) {
         super.onRestoreInstanceState(b);
-        mode = Mode.valueOf(b.getString("timer_mode"));
-        if (mode!=Mode.CANCEL) {
+        timerMode = TimerMode.valueOf(b.getString("timer_mode"));
+        if (timerMode!=TimerMode.CANCEL) {
             tick = b.getInt("timer_tick");
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        onClickBack(null);
+    }
     //protected void onResume() {
     //    super.onResume();
     //    Log.d(LOG_TAG, "onResume ");
    // }
 
 
+
+
+
+
+
+    private MediaPlayer mediaPlayer;
+    private SeekBar seekBar; // создание поля SeekBar
+    private TextView seekBarHint; // поле информации у SeekBar
     TextView dz34_info;
+    PlayerMode playerMode = PlayerMode.STOP;
+    List<String> mp3 = new ArrayList<>();
+    int currIdx = 0;
 
     public void onClickDZ3_4(View view) {
         setContentView(R.layout.dz3_4);
         dz34_info = findViewById(R.id.dz34_info);
-
-
-
+        seekBarHint = findViewById(R.id.seekBarHint);
+        seekBar = findViewById(R.id.seekBar);
+        findSong();
+        if (mp3.isEmpty()) {
+            dz34_info.setText("музыки не найдено!");
+            return;
+        }
+        mediaPlayer = new MediaPlayer();
+        playSong(mp3.get(currIdx));
+        dz34_info.setText("Трек : "+currIdx+", "+mp3.get(currIdx).replaceFirst("mp3","")+", Play для старта");
+        playerMode = PlayerMode.PAUSE;
     }
 
-    public void dz34_back(View view){
+    public void dz34_forward(View view) {
+        dz34_info.setText(">>");
+    }
+    public void dz34_back(View view) {
         dz34_info.setText("<<");
     }
 
-    public void dz34_forward(View view){
-        dz34_info.setText(">>");
+
+    public void dz34_play_pause(View view) {
+        Button b = (Button) findViewById(R.id.play_pause);
+        if (playerMode==PlayerMode.PLAY) {
+            playerMode = PlayerMode.PAUSE;
+            dz34_info.setText("Пауза");
+            b.setText("PLAY");
+            mediaPlayer.pause();
+        } else {
+            b.setText("||");
+            dz34_info.setText("Играем : "+"Шмель");
+            playerMode = PlayerMode.PLAY;
+            mediaPlayer.start();
+        }
+
     }
 
-    public void dz34_pause(View view){
-        dz34_info.setText("||");
+
+    enum PlayerMode{
+        PLAY, PAUSE, STOP
     }
 
-    public void dz34_play(View view){
-        dz34_info.setText("|>");
+    public void findSong() {
+        try {
+            String [] list = getAssets().list("");
+            for(String filename : list) {
+                if (filename.endsWith(".mp3")) {
+                    mp3.add(filename);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    public void playSong(final String filename) {
+        try {
+            AssetFileDescriptor descriptor = getAssets().openFd(filename);
+            mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
+            descriptor.close();
+            mediaPlayer.prepare(); // ассинхронная подготовка плейера к проигрыванию
+            //mediaPlayer.setVolume(0.7f, 0.7f); // задание уровня громкости левого и правого динамиков
+            mediaPlayer.setLooping(false); // назначение отстутствия повторов
+            dz34_info.setText("Играем : "+filename.replaceFirst(".mp3", "")+", PLAY для старта");
+
+            //seekBar.setMax(mediaPlayer.getDuration()); // ограниечение seekBar длинной трека
+            //    new Thread(this).start(); // запуск дополнительного потока
+
+        } catch (Exception e) { // обработка исключения на случай отстутствия файла
+            e.printStackTrace(); // вывод в консоль сообщения отсутствия файла
+        }
+    }
+
+
+
+
+
+
 
 
 
@@ -171,20 +253,20 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    Mode mode = Mode.CANCEL;
+    TimerMode timerMode = TimerMode.CANCEL;
     int tick = 0;
 
     public void onClickDZ2_6(View view){
         setContentView(R.layout.dz2_6);
         TextView tim = findViewById(R.id.dz26_info);
-        mode = Mode.RESET;
+        timerMode = TimerMode.RESET;
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
 
 
             @Override
             public void run() {
-                switch (mode){
+                switch (timerMode){
                     case FORWARD:
                         tick++;
                         break;
@@ -219,24 +301,24 @@ public class MainActivity extends AppCompatActivity {
         }, 0, 1000);
     }
 
-    enum Mode{
+    enum TimerMode{
         BACK, FORWARD, PAUSE, RESET, CANCEL
     }
 
     public void back(View view){
-        mode = Mode.BACK;
+        timerMode = TimerMode.BACK;
     }
 
     public void forward(View view){
-        mode = Mode.FORWARD;
+        timerMode = TimerMode.FORWARD;
     }
 
     public void pause(View view){
-        mode = Mode.PAUSE;
+        timerMode = TimerMode.PAUSE;
     }
 
     public void reset(View view){
-        mode = Mode.RESET;
+        timerMode = TimerMode.RESET;
     }
 
 
@@ -298,7 +380,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickBack(View view) {
         setContentView(R.layout.activity_main);
-        mode = Mode.CANCEL;
+        timerMode = TimerMode.CANCEL;
+        playerMode = PlayerMode.STOP;
+        if (mediaPlayer!=null) {
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            mediaPlayer = null;
+        }
     }
 
 

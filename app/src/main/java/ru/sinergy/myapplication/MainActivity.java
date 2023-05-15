@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     private Random rnd = new Random();
+    private static Timer timer;
 
     @Override
     protected void onCreate(Bundle b) {
@@ -81,49 +82,179 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private MediaPlayer mediaPlayer;
-    private SeekBar seekBar; // создание поля SeekBar
-    private TextView seekBarHint; // поле информации у SeekBar
-    TextView dz34_info;
-    PlayerMode playerMode = PlayerMode.STOP;
-    List<String> mp3 = new ArrayList<>();
-    int currIdx = 0;
+    private static MediaPlayer mediaPlayer;
+    private static SeekBar seekBar; // создание поля SeekBar
+    private static SeekBar volume;
+    //private static TextView seekBarHint; // поле информации у SeekBar
+    private static TextView dz34_info;
+    private static PlayerMode playerMode = PlayerMode.STOP;
+    private static List<String> mp3 = new ArrayList<>();
+    private static int currIdx = 0;
+    private Button playPauseButton;
+    private static String songName="";
+    private static String time="";
 
     public void onClickDZ3_4(View view) {
+        //mediaPlayer = new MediaPlayer();
         setContentView(R.layout.dz3_4);
         dz34_info = findViewById(R.id.dz34_info);
-        seekBarHint = findViewById(R.id.seekBarHint);
+        //seekBarHint = findViewById(R.id.seekBarHint);
         seekBar = findViewById(R.id.seekBar);
+        volume = findViewById(R.id.volume);
+        volume.setMin(0);
+        volume.setMax(10);
+        volume.setProgress(10, true);
+        playPauseButton = (Button) findViewById(R.id.play_pause);
         findSong();
         if (mp3.isEmpty()) {
             dz34_info.setText("музыки не найдено!");
             return;
         }
-        mediaPlayer = new MediaPlayer();
-        playSong(mp3.get(currIdx));
-        dz34_info.setText("Трек : "+currIdx+", "+mp3.get(currIdx).replaceFirst("mp3","")+", Play для старта");
+        playSong(false);
+        dz34_info.setText("Трек : "+currIdx+", "+songName+", Play для старта");
         playerMode = PlayerMode.PAUSE;
+        // создание слушателя изменения SeekBar
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            // метод при перетаскивании ползунка по шкале, где progress позволяет получить нове значение ползунка (позже progress назрачается длина трека в миллисекундах)
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) {
+                if (playerMode!=PlayerMode.PLAY) return;
+                //seekBarHint.setVisibility(View.INVISIBLE); // установление не видимости seekBarHint
+                int timeTrack = (int) Math.ceil(progress/1000f); // перевод времени из миллисекунд в секунды
+
+                // вывод на экран времени отсчёта трека
+                if (timeTrack < 10) {
+                    time = ("00:0" + timeTrack);
+                } else if (timeTrack < 60){
+                    time = ("00:" + timeTrack);
+                } else if (timeTrack >= 60) {
+                    time = ("01:" + (timeTrack - 60));
+                }
+
+                // передвижение времени отсчёта трека
+                double percentTrack = progress / (double) seekBar.getMax(); // получение процента проигранного трека (проигранное время делится на длину трека)
+                // seekBar.getX() - начало seekBar по оси Х
+                // seekBar.getWidth() - ширина контейнера seekBar
+                // 0.92 - поправочный коэффициент (так как seekBar занимает не всю ширину своего контейнера)
+                //seekBarHint.setX(seekBar.getX() + Math.round(seekBar.getWidth()*percentTrack*0.92));
+            }
+            @Override // метод при начале перетаскивания ползунка по шкале
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                //seekBarHint.setVisibility(View.INVISIBLE); // установление видимости seekBarHint
+            }
+            @Override // метод при завершении перетаскивания ползунка по шкале
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (mediaPlayer != null && mediaPlayer.isPlaying()) { // если mediaPlayer не пустой и mediaPlayer воспроизводится
+                    mediaPlayer.seekTo(seekBar.getProgress()); // обновление позиции трека при изменении seekBar
+                }
+            }
+        });
+
+        volume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            // метод при перетаскивании ползунка по шкале, где progress позволяет получить нове значение ползунка (позже progress назрачается длина трека в миллисекундах)
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) {
+                if (mediaPlayer==null) return;
+                float vol = (float) progress / 10;
+                mediaPlayer.setVolume(vol, vol);
+            }
+            @Override // метод при начале перетаскивания ползунка по шкале
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+            @Override // метод при завершении перетаскивания ползунка по шкале
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int currentPosition, total;
+            boolean flash;
+            String info = "";
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (mediaPlayer==null) {
+                            return;
+                        }
+
+                        switch (playerMode) {
+
+                            case PAUSE:
+                                if (flash) {
+                                    playPauseButton.setText("PLAY");//dz34_info.setText("Пауза");
+                                    flash = false;
+                                } else {
+                                    playPauseButton.setText("");//dz34_info.setText("Пауза");
+                                    flash = true;
+                                }
+                                break;
+
+                            case STOP:
+                                if (mediaPlayer.isPlaying()) {
+                                    mediaPlayer.stop();
+                                }
+                                //seekBarHint.setVisibility(View.INVISIBLE);
+                                playPauseButton.setText("REPEAT");
+                                currIdx = 0;
+                                break;
+
+                            case PLAY:
+                                currentPosition = mediaPlayer.getCurrentPosition();
+                                total = mediaPlayer.getDuration();
+                                if (currentPosition>0 && currentPosition < total) {
+                                    dz34_info.setText ("Трек : "+currIdx+"\n" + songName+" \n"+time);
+                                    seekBar.setProgress(currentPosition); // обновление seekBar текущей позицией трека
+                                } else {
+                                    if (currIdx < mp3.size()-1) {
+                                        dz34_next(null);
+                                    } else {
+                                        dz34_info.setText("Всё проиграно");
+                                        playerMode = PlayerMode.STOP;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                });
+            }
+        }, 0, 500);
     }
 
-    public void dz34_forward(View view) {
-        dz34_info.setText(">>");
+    public void dz34_next(View view) {
+        if (currIdx>=mp3.size()-1) {
+            dz34_info.setText("Конец списка");
+            return;
+        }
+        currIdx++;
+        playSong(true);
+        dz34_info.setText("Трек : "+currIdx+", "+songName);
     }
-    public void dz34_back(View view) {
-        dz34_info.setText("<<");
+    public void dz34_previos(View view) {
+        if (currIdx<=0) {
+            dz34_info.setText("Начало списка");
+            return;
+        }
+        currIdx--;
+        playSong(true);
+        dz34_info.setText("Трек : "+currIdx+", "+songName);
     }
 
 
     public void dz34_play_pause(View view) {
-        Button b = (Button) findViewById(R.id.play_pause);
-        if (playerMode==PlayerMode.PLAY) {
+        if (playerMode==PlayerMode.STOP) {
+            playerMode = PlayerMode.PLAY;
+            playSong(true);
+            mediaPlayer.start();
+        } else if (playerMode==PlayerMode.PLAY) {
             playerMode = PlayerMode.PAUSE;
-            dz34_info.setText("Пауза");
-            b.setText("PLAY");
             mediaPlayer.pause();
         } else {
-            b.setText("||");
-            dz34_info.setText("Играем : "+"Шмель");
             playerMode = PlayerMode.PLAY;
+            playPauseButton.setText("||");
             mediaPlayer.start();
         }
 
@@ -147,21 +278,45 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void playSong(final String filename) {
+    public void playSong(final boolean start) {
+        String filename = mp3.get(currIdx);
+        if (mediaPlayer!=null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+        mediaPlayer = new MediaPlayer();
+      /*  mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                //mediaPlayer.setLooping(false); // назначение отстутствия повторов
+                //seekBar.setMax(mediaPlayer.getDuration()); // ограниечение seekBar длинной трека
+                //seekBar.setProgress(0);
+                //songName = filename.replaceFirst(".mp3", "");
+                if (start) {
+                    playerMode = PlayerMode.PAUSE;
+                    dz34_play_pause(null);//mp.start();
+                }
+            }
+        });*/
+
         try {
             AssetFileDescriptor descriptor = getAssets().openFd(filename);
             mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
             descriptor.close();
+            //mediaPlayer.prepareAsync();
             mediaPlayer.prepare(); // ассинхронная подготовка плейера к проигрыванию
             //mediaPlayer.setVolume(0.7f, 0.7f); // задание уровня громкости левого и правого динамиков
             mediaPlayer.setLooping(false); // назначение отстутствия повторов
-            dz34_info.setText("Играем : "+filename.replaceFirst(".mp3", "")+", PLAY для старта");
-
-            //seekBar.setMax(mediaPlayer.getDuration()); // ограниечение seekBar длинной трека
-            //    new Thread(this).start(); // запуск дополнительного потока
-
+            seekBar.setMax(mediaPlayer.getDuration()); // ограниечение seekBar длинной трека
+            seekBar.setProgress(0);
+            songName = filename.replaceFirst(".mp3", "");
+            if (start) {
+                playerMode = PlayerMode.PAUSE;
+                dz34_play_pause(null);//mp.start();
+            }
         } catch (Exception e) { // обработка исключения на случай отстутствия файла
             e.printStackTrace(); // вывод в консоль сообщения отсутствия файла
+            playerMode = PlayerMode.STOP;
         }
     }
 
@@ -260,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.dz2_6);
         TextView tim = findViewById(R.id.dz26_info);
         timerMode = TimerMode.RESET;
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
 
 
@@ -382,6 +537,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         timerMode = TimerMode.CANCEL;
         playerMode = PlayerMode.STOP;
+        if (timer!=null) {
+            timer.cancel();
+            timer = null;
+        }
         if (mediaPlayer!=null) {
             mediaPlayer.stop();
             mediaPlayer.reset();

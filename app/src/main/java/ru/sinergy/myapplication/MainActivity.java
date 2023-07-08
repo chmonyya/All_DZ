@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle b) {
         super.onCreate(b);
         setContentView(R.layout.activity_main);
-        // dz2_2 = findViewById(R.id.dz2_2);
     }
 
     /*
@@ -75,6 +74,49 @@ public class MainActivity extends AppCompatActivity {
     //    super.onResume();
     //    Log.d(LOG_TAG, "onResume ");
    // }
+
+
+
+
+    public void onClickDZ4_1(View view) {
+        setContentView(R.layout.dz4_1);
+        /*
+            TextView dz41_info = findViewById(R.id.dz34_info);
+    Toast toast = Toast.makeText(getApplicationContext(), R.string.successful_search, Toast.LENGTH_SHORT); // инициализация
+                        //LinearLayout toastContainer = (LinearLayout) toast.getView(); !!! return null sience android api 11, use toast.setView(ImageView)
+                        // добавление в тост картинки
+                        ImageView cat = new ImageView(getApplicationContext()); // создание объекта картинки (контекст)
+                        cat.setImageResource(R.drawable.found_cat); // добавление картинки из ресурсов
+                        toast.setView(cat);
+                        toast.setGravity(Gravity.LEFT | Gravity.TOP,  55, y - 100); // задание позиции на экране (положение, смещение по оси Х, смещение по оси Y)
+                        toast.show(); // демонстрация тоста на экране
+         */
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -331,6 +373,30 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // создание полей для вывода на экран нужных значений
     private TextView coordinatesOut; // окно вывода значений координат
     private int x; // задание поля для координаты X
@@ -405,6 +471,41 @@ public class MainActivity extends AppCompatActivity {
             return true; // подтверждение нашей обработки событий
         }
     };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

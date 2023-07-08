@@ -95,4 +95,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/dz4_1"
+        android:layout_width="122dp"
+        android:layout_height="83dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="36dp"
+        android:onClick="onClickDZ4_1"
+        android:text="ДЗ 4_1   Бильярд"
+        app:layout_constraintStart_toEndOf="@+id/dz3_4"
+        app:layout_constraintTop_toBottomOf="@+id/dz3_2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

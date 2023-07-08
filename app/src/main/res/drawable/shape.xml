@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
+    <solid android:color="#ffffffff" />
+    <stroke
+        android:width="2dp"
+        android:color="#90a4ae" />
+    <size
+        android:height="50dp"
+        android:width="50dp" />
+    <padding
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp" />
+    <corners android:radius="100dp" />
+</shape>
+
+
+<!--
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item> <!- Элемент списка->
+        <shape android:shape="rectangle"> <!- Форма->
+            <solid android:color="#BED4FA"/>  <!- Цвет фона->
+            <corners android:radius="30dp"/> <!- Скругление углов->
+        </shape>
+    </item>
+</selector>
+-->

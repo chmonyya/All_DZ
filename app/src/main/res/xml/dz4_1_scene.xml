@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:autoTransition="animateToEnd"
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+       <KeyFrameSet>
+       </KeyFrameSet>
+    </Transition>
+
+    <Transition
+        motion:autoTransition="animateToStart"
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+        <KeyFrameSet>
+        </KeyFrameSet>
+    </Transition>
+
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="452dp"
+            android:id="@+id/baterfly"
+            android:layout_marginStart="315dp"
+            android:layout_marginLeft="315dp"
+            motion:layout_constraintHorizontal_bias="0.56" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="24dp"
+            android:id="@+id/baterfly"
+            android:layout_marginEnd="316dp"
+            android:layout_marginRight="316dp"
+            motion:layout_constraintHorizontal_bias="0.406" />
+    </ConstraintSet>
+</MotionScene>

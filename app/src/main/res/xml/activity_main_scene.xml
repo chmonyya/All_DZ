@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <!-- Переход между состояниями от старта к финишу-->
+    <Transition
+        motion:autoTransition="animateToEnd"
+        motion:constraintSetStart="@id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:duration="5000">
+       <KeyFrameSet>
+           <KeyPosition
+               motion:motionTarget="@+id/baterfly"
+               motion:framePosition="49"
+               motion:keyPositionType="pathRelative"
+               motion:percentX="0.5"
+               motion:percentY="0.14" />
+       </KeyFrameSet>
+    </Transition>
+
+
+    <!-- Переход между состояниями от финиша к старту-->
+    <Transition
+        motion:autoTransition="animateToEnd"
+        motion:constraintSetEnd="@+id/start"
+        motion:constraintSetStart="@id/end"
+        motion:duration="5000"/>
+
+    <!-- Настройки описания состояния экрана старта-->
+    <ConstraintSet android:id="@+id/start">
+        <!-- Старт рисунка облака-->
+        <Constraint android:id="@+id/cloud">
+            <Layout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                motion:layout_constraintLeft_toLeftOf="parent"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"/>
+        </Constraint>
+    </ConstraintSet>
+
+    <!-- Настройки описания состояния экрана финиша-->
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@+id/bird">
+            <Layout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                motion:layout_constraintBottom_toBottomOf="parent"/>
+        </Constraint>
+    </ConstraintSet>
+
+</MotionScene>

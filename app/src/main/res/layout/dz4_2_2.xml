@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/close"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".dz4_2_2">
+
+    <Button
+        android:id="@+id/back422"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="40dp"
+        android:text="Выйти"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/ticketPay"
+        android:layout_width="326dp"
+        android:layout_height="81dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="88dp"
+        android:text="Оплатить"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/info422" />
+
+    <TextView
+        android:id="@+id/info422"
+        android:layout_width="315dp"
+        android:layout_height="346dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="60dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

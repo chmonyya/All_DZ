@@ -6,12 +6,12 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(b);
         setContentView(R.layout.activity_main);
     }
+
+
+
 
     /*
     при повороте
@@ -75,24 +78,14 @@ public class MainActivity extends AppCompatActivity {
     //    Log.d(LOG_TAG, "onResume ");
    // }
 
-
-
-
-    public void onClickDZ4_1(View view) {
-        setContentView(R.layout.dz4_1);
-        /*
-            TextView dz41_info = findViewById(R.id.dz34_info);
-    Toast toast = Toast.makeText(getApplicationContext(), R.string.successful_search, Toast.LENGTH_SHORT); // инициализация
-                        //LinearLayout toastContainer = (LinearLayout) toast.getView(); !!! return null sience android api 11, use toast.setView(ImageView)
-                        // добавление в тост картинки
-                        ImageView cat = new ImageView(getApplicationContext()); // создание объекта картинки (контекст)
-                        cat.setImageResource(R.drawable.found_cat); // добавление картинки из ресурсов
-                        toast.setView(cat);
-                        toast.setGravity(Gravity.LEFT | Gravity.TOP,  55, y - 100); // задание позиции на экране (положение, смещение по оси Х, смещение по оси Y)
-                        toast.show(); // демонстрация тоста на экране
-         */
+    //билет
+    public void onClickDZ4_2(View view) {
+        Intent it = new Intent(getApplicationContext(), dz4_2_1.class);
+        startActivity(it);
+        //setContentView(R.layout.dz4_2_1);
     }
 
+    //касса
 
 
 
@@ -108,18 +101,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    //бабочка
+    public void onClickDZ4_1(View view) {
+        setContentView(R.layout.dz4_1);
+    }
 
 
 

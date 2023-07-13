@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -30,11 +31,20 @@ public class MainActivity extends AppCompatActivity {
 
     private Random rnd = new Random();
     private static Timer timer;
+    private Button close;
 
     @Override
     protected void onCreate(Bundle b) {
         super.onCreate(b);
         setContentView(R.layout.activity_main);
+        close= findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener () {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            }
+        );
     }
 
 
@@ -77,6 +87,13 @@ public class MainActivity extends AppCompatActivity {
     //    super.onResume();
     //    Log.d(LOG_TAG, "onResume ");
    // }
+
+
+    public void onClickDZ4_3(View view) {
+        Intent it = new Intent(getApplicationContext(), dz4_3.class);
+        startActivity(it);
+        //setContentView(R.layout.dz4_2_1);
+    }
 
     //билет
     public void onClickDZ4_2(View view) {
@@ -806,9 +823,9 @@ public class MainActivity extends AppCompatActivity {
         count.setText("Понадобится \n" + ((int)((weight*100) / delit)) + "\n кг топлива");
     }
 
-    public void exit(View view){
-        finish();
-    }
+  //  public void exit(View view){
+    //    finish();
+    //}
 
 
 

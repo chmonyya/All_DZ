@@ -97,7 +97,7 @@
 
     <Button
         android:id="@+id/dz4_1"
-        android:layout_width="122dp"
+        android:layout_width="132dp"
         android:layout_height="83dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -116,5 +116,16 @@
         android:text="ДЗ 4_2 Онлайн - касса"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dz3_4" />
+
+    <Button
+        android:id="@+id/dz4_3"
+        android:layout_width="127dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:onClick="onClickDZ4_3"
+        android:text="ДЗ4_3 Справочник"
+        app:layout_constraintStart_toEndOf="@+id/dz4_2"
+        app:layout_constraintTop_toBottomOf="@+id/dz4_1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".dz4_3_1">
+
+    <ImageView
+        android:id="@+id/dz431fon"
+        android:layout_width="413dp"
+        android:layout_height="734dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/dz43fon"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <ImageButton
+        android:id="@+id/back431"
+        android:layout_width="93dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/shape_43"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/back43" />
+
+    <ListView
+        android:id="@+id/lw431"
+        android:layout_width="131dp"
+        android:layout_height="257dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="124dp"
+        android:background="@drawable/shape_431"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dz431tv"
+        android:layout_width="139dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="56dp"
+        android:text="Кто лучший?"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lw431" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

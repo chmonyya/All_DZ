@@ -41,6 +41,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/baterfly" />
+
+        <ImageButton
+            android:id="@+id/dz43_b2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/baterfly" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

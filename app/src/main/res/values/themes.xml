@@ -13,4 +13,10 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Button.Gray" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@android:color/darker_gray</item>
+    </style>
+
+
 </resources>

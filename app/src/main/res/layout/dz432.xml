@@ -29,10 +29,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv432"
-        android:layout_width="135dp"
-        android:layout_height="243dp"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="196dp"
+        android:layout_width="247dp"
+        android:layout_height="203dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="160dp"
         android:background="@drawable/shape_431"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

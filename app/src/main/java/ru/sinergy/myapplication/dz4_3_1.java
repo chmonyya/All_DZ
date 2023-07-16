@@ -40,14 +40,19 @@ public class dz4_3_1 extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv431.setLayoutManager(layoutManager);
 
-        hero.add(new dz4_3.Person("Вася", R.drawable.baterfly, "ddd"));
-        hero.add(new dz4_3.Person("Петя", R.drawable.baterfly, "fff"));
-        hero.add(new dz4_3.Person("ddd", R.drawable.baterfly, "fff"));
-        hero.add(new dz4_3.Person("fg", R.drawable.baterfly, "fff"));
-        hero.add(new dz4_3.Person("cgh", R.drawable.baterfly, "fff"));
-        hero.add(new dz4_3.Person("ert", R.drawable.baterfly, "fff"));
-        hero.add(new dz4_3.Person("g", R.drawable.baterfly, "fff"));
-        hero.add(new dz4_3.Person("fgh", R.drawable.baterfly, "fff"));
+        hero.add(new dz4_3.Person("Храм Фусими-инари", R.drawable.dz4311, "Киото"));
+        hero.add(new dz4_3.Person("Небесное дерево", R.drawable.dz4312, "Токио"));
+        hero.add(new dz4_3.Person("Мусорный остров", R.drawable.dz4313, "Токио"));
+        hero.add(new dz4_3.Person("Район Асакуса", R.drawable.dz4314, "Токио"));
+        hero.add(new dz4_3.Person("Рыбный рынок Цукидзи", R.drawable.dz4315, "Токио"));
+        hero.add(new dz4_3.Person("Бамбуковый лес Сагано", R.drawable.dz4316, "Киото"));
+        hero.add(new dz4_3.Person("Золотой павильон", R.drawable.dz4317, "Киото"));
+        hero.add(new dz4_3.Person("Гора Фудзи", R.drawable.dz4318, "остров Хонсю"));
+        hero.add(new dz4_3.Person("Химедзи", R.drawable.dz4319, "остров Хонсю"));
+        hero.add(new dz4_3.Person("Город Нара", R.drawable.dz43110, "остров Хонсю"));
+        hero.add(new dz4_3.Person("Храм Тосёгу", R.drawable.dz43111, "Никко"));
+        hero.add(new dz4_3.Person("Императорский дворец", R.drawable.dz43112, "Токио"));
+        hero.add(new dz4_3.Person("Храм Тодай-дзи", R.drawable.dz43113, "Никко"));
 
         ArrayAdapter ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, hero);
         //lw431.setAdapter(ad);

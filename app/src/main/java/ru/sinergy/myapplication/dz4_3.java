@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +21,8 @@ import java.util.List;
 public class dz4_3 extends AppCompatActivity {
 
     private ImageButton back;
-    private ImageButton dz43_b1;
-    private ImageButton dz43_b2;
+    private Button dz43_b1;
+    private Button dz43_b2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

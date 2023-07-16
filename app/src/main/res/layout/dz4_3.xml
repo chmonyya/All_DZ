@@ -28,25 +28,29 @@
         app:srcCompat="@drawable/back43" />
 
     <LinearLayout
-        android:layout_width="131dp"
-        android:layout_height="290dp"
+        android:layout_width="208dp"
+        android:layout_height="287dp"
         android:layout_marginStart="140dp"
         android:layout_marginTop="112dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dz43fon">
 
-        <ImageButton
+        <Button
             android:id="@+id/dz43_b1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/baterfly" />
+            android:layout_height="64dp"
+            android:background="@drawable/shape_431"
+            app:backgroundTint="@color/gray"
+            android:text="Достопримечательности Японии" />
 
-        <ImageButton
+        <Button
             android:id="@+id/dz43_b2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/baterfly" />
+            android:layout_height="61dp"
+            android:background="@drawable/shape_431"
+            app:backgroundTint="@color/gray"
+            android:text="Культура Японии" />
 
     </LinearLayout>
 

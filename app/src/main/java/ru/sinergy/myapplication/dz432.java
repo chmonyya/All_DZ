@@ -30,7 +30,10 @@ public class dz432 extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv432.setLayoutManager(layoutManager);
 
-        hero.add(new dz4_3.Person("Вася", R.drawable.baterfly, "ddd"));
+        hero.add(new dz4_3.Person("Аниме и манга", R.drawable.dz4321, "Аниме «Принцесса Мононоке»"));
+        hero.add(new dz4_3.Person("Одежда", R.drawable.dz4322, "Кимоно гейши"));
+        hero.add(new dz4_3.Person("Театр и танец", R.drawable.dz4323, "Театр кабуки"));
+        hero.add(new dz4_3.Person("Кинематограф", R.drawable.dz4324, "«Семь самураев» Акиро Куросавы"));
 
 
         ArrayAdapter ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, hero);

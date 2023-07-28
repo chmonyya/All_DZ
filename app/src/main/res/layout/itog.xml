@@ -24,20 +24,5 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/leftButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="50"
-            android:text="влево" />
-
-        <Button
-            android:id="@+id/rightButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="50"
-            android:text="вправо" />
-    </LinearLayout>
+        android:orientation="horizontal"/>
 </LinearLayout>

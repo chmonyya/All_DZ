@@ -3,10 +3,13 @@ package ru.sinergy.myapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
@@ -18,7 +21,7 @@ public class GameView extends SurfaceView implements Runnable {
     public static int maxX = 20; // кубиков по горизонтали
     public static int maxY = 28; // кубиков по вертикали
     public static float dotPerBoxX, dotPerBoxY = 0; // точек в кубике
-
+    private int screenX, screenY; // поля размеров экрана по осям X и Y
     private boolean play = true;
     private Thread gameThread = null;
     private Paint paint;
@@ -33,10 +36,22 @@ public class GameView extends SurfaceView implements Runnable {
     private int count;
     private int delay;
     private Context context;
+    public static boolean moveLeft,moveRight = false;
 
-    public GameView(Context context) {
+    public GameView(Context context, int screenX, int screenY) {
         super(context);
         this.context = context;
+        this.screenX = screenX;
+        this.screenY = screenY;
+        dotPerBoxX = screenX/maxX; // вычисляем число пикселей в юните
+        dotPerBoxY = screenY/maxY;
+
+        catBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cat);
+        catBitmap = Bitmap.createScaledBitmap(catBitmap, (int)(catSize * dotPerBoxX), (int)(catSize * dotPerBoxY), false);
+        //catBitmap.recycle(); java.lang.RuntimeException: Canvas: trying to use a recycled bitmap android.graphics.Bitmap@e268930
+
+        cat = new Cat(getContext()); // добавляем сущность котика
+
         surfaceHolder = getHolder();
 
 
@@ -51,6 +66,7 @@ public class GameView extends SurfaceView implements Runnable {
         //catBitmap = Bitmap.createScaledBitmap(catBitmap, (int)(catSize * unitW), (int)(catSize * unitH), false);
         //catBitmap.recycle();
        // cat = new Cat(getContext()); // добавляем сущность котика
+
     }
 
 
@@ -81,6 +97,9 @@ public class GameView extends SurfaceView implements Runnable {
 
                 delay++;
                 if (delay==150) {
+                    Itog.music.stop();
+                    //stop service and stop music
+                    //context.getApplicationContext().stopService(new Intent(context, SoundService.class));
                     Intent it = new Intent(context.getApplicationContext(), MainActivity.class);
                     context.startActivity(it);
                     break;
@@ -92,18 +111,40 @@ public class GameView extends SurfaceView implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-
+        }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
 
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if (event.getX() < (screenX / 2)) {
+                    moveLeft = true;
+                    moveRight = false;
+                } else {
+                    moveRight = true;
+                    moveLeft = false;
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+
+            case MotionEvent.ACTION_UP:
+                moveLeft = false;
+                moveRight = false;
+                break;
+        }
+
+        return true;
     }
+
 
 
     private void draw() {
         if (surfaceHolder.getSurface().isValid()) {  //проверяем валидный ли surface
 
-            if(cat==null) { // костыль с тупой surfaceHolder
+           /* if(cat==null) { // костыль с тупой surfaceHolder
                 dotPerBoxX = surfaceHolder.getSurfaceFrame().width()/maxX; // вычисляем число пикселей в юните
                 dotPerBoxY = surfaceHolder.getSurfaceFrame().height()/maxY;
 
@@ -112,7 +153,7 @@ public class GameView extends SurfaceView implements Runnable {
                 //catBitmap.recycle(); java.lang.RuntimeException: Canvas: trying to use a recycled bitmap android.graphics.Bitmap@e268930
 
                 cat = new Cat(getContext()); // добавляем сущность котика
-            }
+            }*/
 
             canvas = surfaceHolder.lockCanvas(); // закрываем canvas
             canvas.drawBitmap(cheeseBitmap, 0, 0, null); //рисуем сыр на фоне
@@ -138,6 +179,7 @@ public class GameView extends SurfaceView implements Runnable {
                 mouse.dead();
                 count++;
                 Itog.counter.setText(""+count);
+                Itog.kill.start();
 
             } else if (mouse.isFree()) {
                 play = false; // останавливаем игру

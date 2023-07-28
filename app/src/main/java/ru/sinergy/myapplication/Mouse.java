@@ -18,7 +18,7 @@ public class Mouse extends Entity {
 
     public Mouse(Context context) {
         y=0;
-        x = random.nextInt(GameView.maxX) - xx;
+        x = 1 + random.nextInt(GameView.maxX-2); //чтобы не бежала половины мыши
         mouseSize = xx*2;
         speed = minSpeed + (maxSpeed - minSpeed) * random.nextFloat();
 

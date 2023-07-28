@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@drawable/fon">
+    android:background="@drawable/fon"
+    android:onClick="onClickItog"
+    tools:context=".MainActivity">
 
     <Button
         android:id="@+id/dz3_4"
@@ -88,8 +89,8 @@
         android:id="@+id/close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:onClick="exit"
         android:text="Выйти"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -127,5 +128,30 @@
         android:text="ДЗ4_3 Справочник"
         app:layout_constraintStart_toEndOf="@+id/dz4_2"
         app:layout_constraintTop_toBottomOf="@+id/dz4_1" />
+
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="146dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="20dp"
+        android:text="Итоговый проект"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dz4_2" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="223dp"
+        android:layout_height="85dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="4dp"
+        android:onClick="onClickItog"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        app:srcCompat="@drawable/itoglogo"
+        android:background="@drawable/shape_431"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

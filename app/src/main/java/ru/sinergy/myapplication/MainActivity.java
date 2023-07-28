@@ -17,7 +17,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -88,7 +87,11 @@ public class MainActivity extends AppCompatActivity {
     //    Log.d(LOG_TAG, "onResume ");
    // }
 
-
+    public void onClickItog(View view) {
+        Intent it = new Intent(getApplicationContext(), Itog.class);
+        startActivity(it);
+        //setContentView(R.layout.dz4_2_1);
+    }
     public void onClickDZ4_3(View view) {
         Intent it = new Intent(getApplicationContext(), dz4_3.class);
         startActivity(it);

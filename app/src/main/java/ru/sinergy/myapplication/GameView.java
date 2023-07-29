@@ -3,17 +3,13 @@ package ru.sinergy.myapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.media.MediaPlayer;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,21 +20,23 @@ public class GameView extends SurfaceView implements Runnable {
     public static int maxY = 28; // кубиков по вертикали
     public static float dotPerBoxX, dotPerBoxY = 0; // точек в кубике
     private int screenX, screenY; // поля размеров экрана по осям X и Y
-    private boolean play = true;
-    private Thread gameThread = null;
+    private boolean play = true; //флаг игры
+    private Thread gameThread = null; //поток игры
     private Paint paint;
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
     private ArrayList<Mouse> mouses = new ArrayList<>(); // мышехранилище
     private final int MOUSE_DELAY = 50; // интервал появления мышей
-    private int currentTime = 0;
+    private int spawnDelay = 0; // счётчик задержки спавна мышей
     protected Bitmap cheeseBitmap, catBitmap; //неменяемые картинки - сырный фон, котик
     protected static float catSize = 5;
-    private Cat cat;
-    private int count;
-    private int delay;
-    private Context context;
-    public static boolean moveLeft,moveRight = false;
+    private Cat cat; //сущность котика
+    private int count; //счёт мышей
+    private int delay; //заденржка перед выходом в конце
+    private Context context; //активность
+    public static boolean moveLeft,moveRight = false; //флаги перемещения
+
+
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
@@ -48,15 +46,13 @@ public class GameView extends SurfaceView implements Runnable {
         dotPerBoxX = screenX/maxX; // вычисляем число пикселей в юните
         dotPerBoxY = screenY/maxY;
 
-        catBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cat);
+        cat = new Cat(getContext()); // добавляем сущность котика
+        catBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cat); //генерация картинки котика
         catBitmap = Bitmap.createScaledBitmap(catBitmap, (int)(catSize * dotPerBoxX), (int)(catSize * dotPerBoxY), false);
         //catBitmap.recycle(); java.lang.RuntimeException: Canvas: trying to use a recycled bitmap android.graphics.Bitmap@e268930
 
-        cat = new Cat(getContext()); // добавляем сущность котика
 
         surfaceHolder = getHolder();
-
-
         paint = new Paint();
         gameThread = new Thread(this);
         gameThread.start();
@@ -67,15 +63,13 @@ public class GameView extends SurfaceView implements Runnable {
         //catBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.telescope);
         //catBitmap = Bitmap.createScaledBitmap(catBitmap, (int)(catSize * unitW), (int)(catSize * unitH), false);
         //catBitmap.recycle();
-       // cat = new Cat(getContext()); // добавляем сущность котика
-
-    }
+     }
 
 
     @Override
     public void run() {
         while (true) {
-            if (play) {
+            if (play) { //игра в процессе
                 if (cat != null) {
                     cat.update();
                     for (Mouse m : mouses) {
@@ -87,15 +81,15 @@ public class GameView extends SurfaceView implements Runnable {
                 draw();
                 checkCollision();
 
-                if (currentTime >= MOUSE_DELAY) {
+                if (spawnDelay >= MOUSE_DELAY) {
                     Mouse mouse = new Mouse(getContext());
                     mouses.add(mouse);
-                    currentTime = 0;
+                    spawnDelay = 0;
                 } else {
-                    currentTime++;
+                    spawnDelay++;
                 }
 
-            } else {
+            } else { //игра окончилась (мышь сбежала)
 
                 delay++;
                 if (delay==150) {
@@ -113,6 +107,80 @@ public class GameView extends SurfaceView implements Runnable {
             }
         }
     }
+
+
+
+
+
+    private void draw() {
+        if (surfaceHolder.getSurface().isValid()) {  //проверяем валидный ли surface
+           /* if(cat==null) { // костыль с тупой surfaceHolder
+                dotPerBoxX = surfaceHolder.getSurfaceFrame().width()/maxX; // вычисляем число пикселей в юните
+                dotPerBoxY = surfaceHolder.getSurfaceFrame().height()/maxY;
+                catBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cat);
+                catBitmap = Bitmap.createScaledBitmap(catBitmap, (int)(catSize * dotPerBoxX), (int)(catSize * dotPerBoxY), false);
+                //catBitmap.recycle(); java.lang.RuntimeException: Canvas: trying to use a recycled bitmap android.graphics.Bitmap@e268930
+            }*/
+            canvas = surfaceHolder.lockCanvas(); // закрываем canvas
+            canvas.drawBitmap(cheeseBitmap, 0, 0, null); //рисуем сыр на фоне
+
+            canvas.drawBitmap(catBitmap, cat.x*dotPerBoxX, cat.y*dotPerBoxY, paint);// рисуем котика
+
+            for(Mouse m: mouses){ // рисуем мышек
+                if (m.isDead()) continue;
+                canvas.drawBitmap(m.mouse, m.x*dotPerBoxX, m.y*dotPerBoxY, paint);
+            }
+
+            surfaceHolder.unlockCanvasAndPost(canvas); // открываем canvas
+        }
+    }
+
+
+
+    private void checkCollision(){ // перебираем мышей на коллизию с котиком
+
+        for (Mouse mouse : mouses) {
+
+            if (mouse.isDead()) continue;
+            if(mouse.isCollision(cat.x, cat.y, catSize)) { //мышку сьел
+
+                mouse.dead();
+                count++;
+                Itog.counter.setText(""+count);
+                Itog.kill.start();
+
+            } else if (mouse.isFree()) {
+
+                play = false; // останавливаем игру
+
+                canvas = surfaceHolder.lockCanvas();
+                Bitmap end;
+                if (count>0) {
+                    end = BitmapFactory.decodeResource(getResources(), R.drawable.win);
+                    end = Bitmap.createScaledBitmap(end, (int)(15 * dotPerBoxX), (int)(12 * dotPerBoxY), false);
+                    canvas.drawBitmap(end, (int)(2 * dotPerBoxX), (int)(10 * dotPerBoxY), null);
+                } else {
+                    end = BitmapFactory.decodeResource(getResources(), R.drawable.looz);
+                    end = Bitmap.createScaledBitmap(end, (int)(15 * dotPerBoxX), (int)(12 * dotPerBoxY), false);
+                    canvas.drawBitmap(end, (int)(2 * dotPerBoxX), (int)(10 * dotPerBoxY), null);
+                }
+                surfaceHolder.unlockCanvasAndPost(canvas);
+
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast toast = Toast.makeText(context.getApplicationContext(),"Игра окончена \nПоймано мышей: "+count, Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                });
+            }
+
+        }
+    }
+
+
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -135,80 +203,8 @@ public class GameView extends SurfaceView implements Runnable {
                 moveRight = false;
                 break;
         }
-
         return true;
     }
-
-
-
-    private void draw() {
-        if (surfaceHolder.getSurface().isValid()) {  //проверяем валидный ли surface
-           /* if(cat==null) { // костыль с тупой surfaceHolder
-                dotPerBoxX = surfaceHolder.getSurfaceFrame().width()/maxX; // вычисляем число пикселей в юните
-                dotPerBoxY = surfaceHolder.getSurfaceFrame().height()/maxY;
-
-                catBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cat);
-                catBitmap = Bitmap.createScaledBitmap(catBitmap, (int)(catSize * dotPerBoxX), (int)(catSize * dotPerBoxY), false);
-                //catBitmap.recycle(); java.lang.RuntimeException: Canvas: trying to use a recycled bitmap android.graphics.Bitmap@e268930
-
-                cat = new Cat(getContext()); // добавляем сущность котика
-            }*/
-            canvas = surfaceHolder.lockCanvas(); // закрываем canvas
-            canvas.drawBitmap(cheeseBitmap, 0, 0, null); //рисуем сыр на фоне
-
-            canvas.drawBitmap(catBitmap, cat.x*dotPerBoxX, cat.y*dotPerBoxY, paint);// рисуем котика
-
-            for(Mouse m: mouses){ // рисуем мышек
-                if (m.isDead()) continue;
-                canvas.drawBitmap(m.mouse, m.x*dotPerBoxX, m.y*dotPerBoxY, paint);
-            }
-
-            surfaceHolder.unlockCanvasAndPost(canvas); // открываем canvas
-        }
-    }
-
-
-
-    private void checkCollision(){ // перебираем мышей на коллизию с котиком
-        for (Mouse mouse : mouses) {
-            if (mouse.isDead()) continue;
-            if(mouse.isCollision(cat.x, cat.y, catSize)) { //мышку сьел
-
-                mouse.dead();
-                count++;
-                Itog.counter.setText(""+count);
-                Itog.kill.start();
-
-            } else if (mouse.isFree()) {
-                play = false; // останавливаем игру
-
-                canvas = surfaceHolder.lockCanvas();
-                Bitmap end;
-                if (count>0) {
-                    end = BitmapFactory.decodeResource(getResources(), R.drawable.win);
-                    end = Bitmap.createScaledBitmap(end, (int)(15 * dotPerBoxX), (int)(12 * dotPerBoxY), false);
-                    canvas.drawBitmap(end, (int)(2 * dotPerBoxX), (int)(10 * dotPerBoxY), null);
-                } else {
-                    end = BitmapFactory.decodeResource(getResources(), R.drawable.looz);
-                    end = Bitmap.createScaledBitmap(end, (int)(15 * dotPerBoxX), (int)(12 * dotPerBoxY), false);
-                    canvas.drawBitmap(end, (int)(2 * dotPerBoxX), (int)(10 * dotPerBoxY), null);
-                }
-                surfaceHolder.unlockCanvasAndPost(canvas);
-
-                ((Activity)context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast toast = Toast.makeText(context.getApplicationContext(),"Игра окончена \nПоймано мышей: "+count, Toast.LENGTH_LONG);
-                        //ImageView cat = new ImageView(context);
-                        //toast.setView(cat);
-                        //toast.setGravity(Gravity.CENTER , 0,0);
-                        toast.show();
-                    }
-                });
-            }
-        }
-    }
-
 
 
 }

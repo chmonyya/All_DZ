@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Mouse extends Entity {
 
-    private int xx = 2; // коэф. по Х
+    private int xx = 2; // ширина мыши
     private float minSpeed = (float) 0.1; // минимальная скорость
     private float maxSpeed = (float) 0.5; // максимальная скорость
     private Random random = new Random(); //рандомайзер

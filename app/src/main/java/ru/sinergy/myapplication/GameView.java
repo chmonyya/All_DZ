@@ -9,9 +9,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -98,8 +100,6 @@ public class GameView extends SurfaceView implements Runnable {
                 delay++;
                 if (delay==150) {
                     Itog.music.stop();
-                    //stop service and stop music
-                    //context.getApplicationContext().stopService(new Intent(context, SoundService.class));
                     Intent it = new Intent(context.getApplicationContext(), MainActivity.class);
                     context.startActivity(it);
                     break;
@@ -143,7 +143,6 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void draw() {
         if (surfaceHolder.getSurface().isValid()) {  //проверяем валидный ли surface
-
            /* if(cat==null) { // костыль с тупой surfaceHolder
                 dotPerBoxX = surfaceHolder.getSurfaceFrame().width()/maxX; // вычисляем число пикселей в юните
                 dotPerBoxY = surfaceHolder.getSurfaceFrame().height()/maxY;
@@ -154,7 +153,6 @@ public class GameView extends SurfaceView implements Runnable {
 
                 cat = new Cat(getContext()); // добавляем сущность котика
             }*/
-
             canvas = surfaceHolder.lockCanvas(); // закрываем canvas
             canvas.drawBitmap(cheeseBitmap, 0, 0, null); //рисуем сыр на фоне
 
@@ -183,14 +181,27 @@ public class GameView extends SurfaceView implements Runnable {
 
             } else if (mouse.isFree()) {
                 play = false; // останавливаем игру
-                //Itog.endGame(count);
+
+                canvas = surfaceHolder.lockCanvas();
+                Bitmap end;
+                if (count>0) {
+                    end = BitmapFactory.decodeResource(getResources(), R.drawable.win);
+                    end = Bitmap.createScaledBitmap(end, (int)(15 * dotPerBoxX), (int)(12 * dotPerBoxY), false);
+                    canvas.drawBitmap(end, (int)(2 * dotPerBoxX), (int)(10 * dotPerBoxY), null);
+                } else {
+                    end = BitmapFactory.decodeResource(getResources(), R.drawable.looz);
+                    end = Bitmap.createScaledBitmap(end, (int)(15 * dotPerBoxX), (int)(12 * dotPerBoxY), false);
+                    canvas.drawBitmap(end, (int)(2 * dotPerBoxX), (int)(10 * dotPerBoxY), null);
+                }
+                surfaceHolder.unlockCanvasAndPost(canvas);
+
                 ((Activity)context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast toast = Toast.makeText(context.getApplicationContext(),"Игра окончена \nПоймано мышей: "+count, Toast.LENGTH_LONG);
                         //ImageView cat = new ImageView(context);
                         //toast.setView(cat);
-                        //toast.setGravity(Gravity.LEFT | Gravity.TOP,  55, y - 100);
+                        //toast.setGravity(Gravity.CENTER , 0,0);
                         toast.show();
                     }
                 });
